@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Pet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Pet|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +15,38 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PetRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    //~ public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $manager)
     {
         parent::__construct($registry, Pet::class);
+        $this->manager = $manager;
+    }
+    
+    public function savePet($name, $type, $photoUrls)
+    {
+        $newPet = new Pet();
+        
+        $newPet
+			->setName($name)
+			->setType($type)
+			->setPhotoUrls($photoUrls);
+		
+		$this->manager->persist($newPet);
+		$this->manager->flush();
+    }
+    
+    public function updatePet(Pet $pet): Pet
+    {
+		$this->manager->persist($pet);
+		$this->manager->flush();
+		
+		return $pet;
+    }
+    
+    public function removePet(Pet $pet)
+    {
+		$this->manager->remove($pet);
+		$this->manager->flush();
     }
 
     // /**
