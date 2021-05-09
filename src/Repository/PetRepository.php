@@ -22,6 +22,9 @@ class PetRepository extends ServiceEntityRepository
         $this->manager = $manager;
     }
     
+    /**
+     * Save a Pet object
+     */
     public function savePet($name, $type, $photoUrls)
     {
         $newPet = new Pet();
@@ -35,6 +38,9 @@ class PetRepository extends ServiceEntityRepository
 		$this->manager->flush();
     }
     
+    /**
+     * Update a Pet object
+     */
     public function updatePet(Pet $pet): Pet
     {
 		$this->manager->persist($pet);
@@ -43,6 +49,9 @@ class PetRepository extends ServiceEntityRepository
 		return $pet;
     }
     
+    /**
+     * Remove a Pet object
+     */
     public function removePet(Pet $pet)
     {
 		$this->manager->remove($pet);
